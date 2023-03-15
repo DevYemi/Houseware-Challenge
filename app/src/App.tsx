@@ -1,12 +1,51 @@
 import { useState } from 'react'
 import './styles/App.css'
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+import HomeScreen from './screens/HomeScreen';
+import AppLayout from './components/AppLayout';
+import ErrorScreen from './screens/ErrorScreen';
+import WordParseScreen from './screens/WordParseScreen';
+
+
 
 function App() {
+  // const router = createBrowserRouter([
+  //   {
+  //     path: "/",
+  //     element: <AppLayout><HomeScreen /></AppLayout>,
+  //     errorElement: <ErrorScreen />
+  //   },
+  //   {
+  //     path: "/:wordId",
+  //     element: <AppLayout><WordParseScreen /></AppLayout>,
+  //   },
+  // ]);
+
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <>
+        <Route
+          path='/'
+          element={<AppLayout><HomeScreen /></AppLayout>}
+          errorElement={<ErrorScreen />}
+        />
+        <Route
+          path='/:wordId'
+          element={<AppLayout><WordParseScreen /></AppLayout>}
+          errorElement={<ErrorScreen />}
+        />
+      </>
+
+    )
+  );
 
   return (
-    <div className="">
-      HELLO WORLD
-    </div>
+    <RouterProvider router={router} />
   )
 }
 
