@@ -14,17 +14,6 @@ import WordParseScreen from './screens/WordParseScreen';
 
 
 function App() {
-  // const router = createBrowserRouter([
-  //   {
-  //     path: "/",
-  //     element: <AppLayout><HomeScreen /></AppLayout>,
-  //     errorElement: <ErrorScreen />
-  //   },
-  //   {
-  //     path: "/:wordId",
-  //     element: <AppLayout><WordParseScreen /></AppLayout>,
-  //   },
-  // ]);
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -35,8 +24,10 @@ function App() {
           errorElement={<ErrorScreen />}
         />
         <Route
-          path='/:wordId'
-          element={<AppLayout><WordParseScreen /></AppLayout>}
+          path='/:userInput'
+          element={<AppLayout customWrapperStyles='h-max'>
+            <WordParseScreen />
+          </AppLayout>}
           errorElement={<ErrorScreen />}
         />
       </>
