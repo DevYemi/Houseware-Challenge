@@ -20,13 +20,7 @@ function WordParseScreen() {
     const [resultantString, setResultantString] = useState<string>("");
     const [showSuccessOverlay, setShowSuccessOverlay] = useState(false);
 
-    const generateRandomColor = () => {
-        const x = Math.round(0xffffff * Math.random()).toString(16);
-        const y = (6 - x.length);
-        const z = "000000";
-        const z1 = z.substring(0, y);
-        return `#${z1}${x}`;
-    }
+
     const removeCharacter = (item: CharType) => {
         const newStr = resultantString.split("").filter((char, i) => {
             return item.char.toLowerCase() !== char.toLowerCase() || item.originalIndex === i
@@ -57,6 +51,22 @@ function WordParseScreen() {
 
     const userInputCharacters = useMemo(() => {
         const characters: CharType[] = [];
+        const colors: string[] = [];
+
+        const generateRandomColor = (): string => {
+            const x = Math.round(0xffffff * Math.random()).toString(16);
+            const y = (6 - x.length);
+            const z = "000000";
+            const z1 = z.substring(0, y);
+            const color = `#${z1}${x}`
+
+            if (colors.includes(color)) {
+                return generateRandomColor()
+            } else {
+                return color;
+            }
+
+        }
 
         if (params?.userInput === resultantString) { // user hasn't removed any duplicate
 
@@ -75,7 +85,7 @@ function WordParseScreen() {
                             }
                         )
                     } else {
-                        const color = generateRandomColor()
+                        const color = generateRandomColor();
                         charStoreRef.current[char.toLowerCase()] = color;
                         characters.push(
                             {
