@@ -5,9 +5,6 @@ import HomeScreen from "../screens/HomeScreen"
 import GetRoutes from '../utils/routes';
 
 
-jest.mock("nanoid", () => {
-    return { nanoid: () => Math.random() * 73647346374 };
-});
 
 
 
@@ -47,7 +44,7 @@ describe("Integration Test", () => {
         const routes = GetRoutes()
 
         render(
-            <MemoryRouter initialIndex={0} initialEntries={["/", `/${string}`]}>
+            <MemoryRouter initialIndex={0} initialEntries={["/", `/word-parser`]}>
                 <Routes>
                     {routes}
                 </Routes>

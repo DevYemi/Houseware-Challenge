@@ -5,3 +5,9 @@
 import '@testing-library/jest-dom/extend-expect';
 import { enableFetchMocks } from 'jest-fetch-mock'
 enableFetchMocks()
+
+
+// Mock nanoid in every test setup
+jest.mock("nanoid", () => {
+    return { nanoid: () => Math.random() * 73647346374 };
+});

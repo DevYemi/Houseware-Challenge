@@ -162,7 +162,7 @@ function WordParseScreen() {
                 <ArrowLeftIcon onClick={navigateBack} className='block cursor-pointer self-start w-6 h-6 md:self-center text-primary' />
                 <fieldset className='border border-gray-300 p-4 py-2 rounded-md md:flex-1'>
                     <legend className='text-gray-300 text-xs px-2 mx-auto'>Original String</legend>
-                    <p className='text-center text-gray-400 [word-break:break-word]'>{userInput}</p>
+                    <p data-testid="userInput" className='text-center text-gray-400 [word-break:break-word]'>{userInput}</p>
                 </fieldset>
                 {
                     (resultantString !== userInput && userInput !== "") &&
@@ -178,7 +178,7 @@ function WordParseScreen() {
                 }
 
             </div>
-            <div className={`sticky top-[160px] w-fit z-[5] bg-transparent mx-auto opacity-0 pointer-events-none transition-all duration-700 ${showSuccessOverlay ? "opacity-100 pointer-events-auto" : ""}`}>
+            <div data-testid="successPrompt" className={`sticky top-[160px] w-fit z-[5] bg-transparent mx-auto opacity-0 pointer-events-none transition-all duration-700 ${showSuccessOverlay ? "opacity-100 pointer-events-auto" : ""}`}>
                 <div role={"presentation"} className="fixed w-full h-full bg-gray-900 opacity-50 top-0 left-0" />
                 <div className='flex relative z-10 bg-white space-x-3 pr-2 items-center'>
                     <span className='bg-green-500 block px-2 py-4'>
@@ -209,6 +209,7 @@ function WordParseScreen() {
                                 {item.char}
                             </span>
                             <span
+                                data-testid={`trashIcon-${i}`}
                                 className='absolute top-4 right-4 -translate-y-5 opacity-0 transition-all duration-700 group-hover:translate-y-0 group-hover:opacity-100'
                                 onClick={() => removeCharacter(item)}
                             >
