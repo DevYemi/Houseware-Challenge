@@ -8,7 +8,7 @@ interface AppLayoutProps {
 
 function AppLayout({ children, customWrapperStyles }: AppLayoutProps) {
     return (
-        <div className={`flex flex-col h-full ${customWrapperStyles}`}>
+        <div className={`flex flex-col h-full bg-black ${customWrapperStyles}`}>
             <Header />
             <div className='flex-1 px-5'>
                 {children}

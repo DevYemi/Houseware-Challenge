@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon, ArrowLongDownIcon, TrashIcon, ArrowLongRightIcon, CheckCircleIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { nanoid } from "nanoid"
 
@@ -14,12 +14,16 @@ interface CharType {
 
 function WordParseScreen() {
     const navigate = useNavigate()
-    const params = useParams();
     const charStoreRef = useRef<Record<string, string>>({})
-    const sucessTextRef = useRef<HTMLParagraphElement | null>(null)
+    const sucessTextRef = useRef<HTMLParagraphElement | null>(null);
+    const [userInput, setUserInput] = useState("");
     const [resultantString, setResultantString] = useState<string>("");
     const [showSuccessOverlay, setShowSuccessOverlay] = useState(false);
 
+    const navigateBack = () => {
+        localStorage.removeItem("StringDuplicateUserInput")
+        navigate(-1)
+    }
 
     const removeCharacter = (item: CharType) => {
         const newStr = resultantString.split("").filter((char, i) => {
@@ -68,7 +72,7 @@ function WordParseScreen() {
 
         }
 
-        if (params?.userInput === resultantString) { // user hasn't removed any duplicate
+        if (userInput === resultantString) { // user hasn't removed any duplicate
 
             for (let i = 0; i < resultantString.length; i++) {
                 const char = resultantString[i];
@@ -126,12 +130,17 @@ function WordParseScreen() {
 
         return characters
 
-    }, [resultantString, params?.userInput])
+    }, [resultantString, userInput])
 
     useEffect(() => {
-        // check if string has duplicate on first render
-        if (params?.userInput) {
-            const isDuplicate = getIsDuplicate(params?.userInput)
+        const string = localStorage.getItem("StringDuplicateUserInput");
+
+        if (string) {
+            setUserInput(string);
+            setResultantString(string);
+
+            // check if string has duplicate on first render
+            const isDuplicate = getIsDuplicate(string)
             if (!isDuplicate) {
                 sucessTextRef.current!.innerText = "Ooops the string you provided have no duplicate"
                 setShowSuccessOverlay(true);
@@ -139,31 +148,24 @@ function WordParseScreen() {
                 sucessTextRef.current!.innerText = "You have sucessfully remove all duplicate string"
                 setShowSuccessOverlay(false);
             }
+        } else {
+            navigate("/")
         }
 
-    }, [getIsDuplicate, params?.userInput])
+    }, [navigate, getIsDuplicate])
 
 
-
-
-    useEffect(() => {
-        // set Resultant string on first render
-        if (params?.userInput) {
-            setResultantString(params?.userInput)
-        }
-
-    }, [params?.userInput])
 
     return (
-        <div className='relative space-y-10 py-5'>
-            <div className='sticky bg-white top-[75px] py-2 z-[2] flex flex-col items-center space-y-3 md:flex-row md:space-x-4 md:space-y-0'>
-                <ArrowLeftIcon onClick={() => navigate(-1)} className='block cursor-pointer self-start w-6 h-6 md:self-center text-primary' />
+        <div data-testid="wordParserWrapper" className='relative space-y-10 py-5'>
+            <div className='sticky bg-[#121212] p-4 rounded-md top-[75px] py-2 z-[2] flex flex-col items-center space-y-3 md:flex-row md:space-x-4 md:space-y-0'>
+                <ArrowLeftIcon onClick={navigateBack} className='block cursor-pointer self-start w-6 h-6 md:self-center text-primary' />
                 <fieldset className='border border-gray-300 p-4 py-2 rounded-md md:flex-1'>
                     <legend className='text-gray-300 text-xs px-2 mx-auto'>Original String</legend>
-                    <p className='text-center text-gray-400 [word-break:break-word]'>{params?.userInput}</p>
+                    <p className='text-center text-gray-400 [word-break:break-word]'>{userInput}</p>
                 </fieldset>
                 {
-                    resultantString !== params?.userInput &&
+                    (resultantString !== userInput && userInput !== "") &&
                     <>
                         <ArrowLongDownIcon className='w-6 h-6 md:hidden text-primary' />
                         <ArrowLongRightIcon className='w-6 h-6 hidden md:block text-primary' />
