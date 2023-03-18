@@ -19,7 +19,7 @@ function HomeScreen() {
     }
 
     return (
-        <div className='flex items-center h-full max-w-md mx-auto '>
+        <div className='flex items-center h-full max-w-md mt-40 mx-auto '>
             <form className='space-y-5 flex-1 bg-[#121212] p-8 rounded-md' action="">
                 <div className='flex flex-col space-y-2'>
                     <label className='text-white' htmlFor="word">Enter any text</label>

@@ -10,7 +10,7 @@ export default function GetRoutes() {
          <Route
             path='/'
             element={
-               <AppLayout>
+               <AppLayout >
                   <HomeScreen />
                </AppLayout>
             }
@@ -20,7 +20,7 @@ export default function GetRoutes() {
          <Route
             path='/word-parser'
             element={
-               <AppLayout customWrapperStyles='h-max'>
+               <AppLayout>
                   <WordParseScreen />
                </AppLayout>
             }
