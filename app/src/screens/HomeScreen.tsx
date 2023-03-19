@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react'
+import React, { MouseEvent, useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { InformationCircleIcon } from "@heroicons/react/24/solid"
 
@@ -18,6 +18,10 @@ function HomeScreen() {
 
     }
 
+    useEffect(() => {
+        localStorage.removeItem("StringDuplicateUserInput")
+    }, [])
+
     return (
         <div className='flex items-center h-full max-w-md mt-40 mx-auto '>
             <form className='space-y-5 flex-1 bg-[#121212] p-8 rounded-md' action="">
@@ -27,7 +31,7 @@ function HomeScreen() {
                         data-testid="inputField"
                         id="word"
                         type="text"
-                        className={`border border-gray-200 px-2 py-3 rounded-md focus:border-primary outline-none ${userInput.error ? "shadow shadow-red-600 border-red-600 focus:border-red-800" : ""} `}
+                        className={`border-2 bg-[#121212] text-white border-[#2E2E2E] px-2 py-3 rounded-md focus:border-primary outline-none ${userInput.error ? "shadow shadow-red-600 border-red-600 focus:border-red-800" : ""} `}
                         placeholder='....text'
                         value={userInput.value}
                         onChange={(e) => setUserInput({ value: e.target.value, error: false })}

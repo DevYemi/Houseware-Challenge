@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 import GetRoutes from "../utils/routes";
 
 
-
+// handles the manual process of user inputing a string from the home page 
 const userInteractionProcess = async (string: string) => {
 
     const user = userEvent.setup()

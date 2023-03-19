@@ -43,6 +43,7 @@ function WordParseScreen() {
             const cardsWrapper = document.querySelector("[data-cards-wrapper]") as HTMLDivElement
             const cards = Array.from(cardsWrapper.children) as HTMLDivElement[]
 
+            // enabled card distortion
             cards.forEach((card, i) => {
                 const cardValue = card.getAttribute("data-card-charvalue")?.toLowerCase()
                 if (item.char.toLowerCase() === cardValue && clickedCard !== card) {
@@ -50,9 +51,11 @@ function WordParseScreen() {
                 }
             })
 
+            // Save cards current state
             const state = Flip.getState(cards)
 
 
+            // change duplicate cards style values
             cards.forEach((card) => {
                 const cardValue = card.getAttribute("data-card-charvalue")?.toLowerCase()
                 if (item.char.toLowerCase() === cardValue && clickedCard !== card) {
@@ -61,6 +64,7 @@ function WordParseScreen() {
             })
 
 
+            // Animate duplicate cards from saved state to current cards style value
             Flip.from(state, {
                 absolute: true,
                 duration: 1,
@@ -270,7 +274,7 @@ function WordParseScreen() {
 
 
     return (
-        <div data-testid="wordParserWrapper" className='relative space-y-10 py-5'>
+        <div data-testid="wordParserWrapper" className='relative space-y-10 py-5 '>
             <div className='md:sticky bg-[#121212] p-4 rounded-md top-[75px] py-2 z-[2] flex flex-col items-center space-y-3 md:flex-row md:space-x-4 md:space-y-0'>
                 <ArrowLeftIcon onClick={navigateBack} className='block cursor-pointer self-start w-6 h-6 md:self-center text-primary' />
                 <fieldset className='border border-gray-300 p-4 py-2 rounded-md md:flex-1'>
@@ -306,7 +310,7 @@ function WordParseScreen() {
 
             </div>
 
-            <div data-cards-wrapper className='grid grid-cols-[repeat(auto-fit,_minmax(100px,_1fr))]  gap-8 md:grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))]'>
+            <div data-cards-wrapper className='grid grid-cols-[repeat(auto-fill,_minmax(132px,_1fr))] gap-4  md:gap-8 md:grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] '>
                 {
                     userInputCharacters.map((item, i) => (
                         <div
@@ -314,24 +318,24 @@ function WordParseScreen() {
                             data-card
                             data-cardindex={i}
                             data-card-charvalue={item.char}
-                            className='[perspective:300px] '
+                            className='[perspective:300px]'
                         >
                             <p
 
-                                className={`group relative bg-[radial-gradient(farthest-corner_circle_at_0%_0%,_transparent_5%,_transparent_20%),url("/pattern.png"),url("/checkBoard.png")]  [background-blend-mode:soft-light,soft-light,hue] bg-contain rounded-md w-28 h-28 shadow-black md:w-52 md:h-52`}
+                                className={`group aspect-square   relative bg-[radial-gradient(farthest-corner_circle_at_0%_0%,_transparent_5%,_transparent_20%),url("/pattern.png"),url("/checkBoard.png")]  [background-blend-mode:soft-light,soft-light,hue] bg-contain rounded-md  shadow-black `}
                                 style={{ backgroundColor: item.color }}
-                                onTouchStart={(e: TouchEvent) => removeCharacter(i, item)}
+                                // onTouchStart={(e: TouchEvent) => removeCharacter(i, item)}
                                 onMouseMove={(e: MouseEvent) => rotateCards(e, "enter")}
                                 onMouseLeave={(e: MouseEvent) => rotateCards(e, "leave")}
 
                             >
                                 <span
-                                    className='flex justify-center items-center h-full text-white text-[4rem] '>
+                                    className='flex font-medium justify-center items-center h-full text-white text-[4rem] '>
                                     {item.char}
                                 </span>
                                 <span
                                     data-testid={`trashIcon-${i}`}
-                                    className='absolute bg-red-200 p-2 rounded-md cursor-pointer top-4 right-4 -translate-y-5 opacity-0 transition-all duration-700 group-hover:translate-y-0 group-hover:opacity-100'
+                                    className='absolute bg-red-200 p-2 rounded-md cursor-pointer top-1 right-1 md:top-4 md:right-4  transition-all duration-700'
                                     onClick={(e: MouseEvent) => removeCharacter(i, item)}
                                 >
                                     <TrashIcon className='w-6 h-6 text-red-500' />
