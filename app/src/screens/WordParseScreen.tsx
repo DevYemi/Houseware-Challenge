@@ -38,7 +38,7 @@ function WordParseScreen() {
 
         setShowSuccessOverlay(!isDuplicate)
 
-        if (isDuplicate || newStr !== resultantString) {
+        if (isDuplicate || newStr !== resultantString) { //create a nice smooth animation when duplicate is being removed
             const clickedCard = document.querySelector(`[data-cardindex="${index}"]`)
             const cardsWrapper = document.querySelector("[data-cards-wrapper]") as HTMLDivElement
             const cards = Array.from(cardsWrapper.children) as HTMLDivElement[]
@@ -102,7 +102,7 @@ function WordParseScreen() {
 
     }
 
-    const getIsDuplicate = useCallback((str: string) => {
+    const getIsDuplicate = useCallback((str: string) => { //checks and return a boolean if a string contains duplicates
         if (!str) return false
         const store: string[] = [];
         let value: boolean = false;
@@ -120,7 +120,7 @@ function WordParseScreen() {
         return value;
     }, [])
 
-    const rotateCards = (e: MouseEvent, type: "enter" | "leave") => {
+    const rotateCards = (e: MouseEvent, type: "enter" | "leave") => { // 3d rotate card on hover 
         const el = e.currentTarget
         const rect = el.getBoundingClientRect()
 
@@ -275,7 +275,7 @@ function WordParseScreen() {
 
     return (
         <div data-testid="wordParserWrapper" className='relative space-y-10 py-5 '>
-            <div className='md:sticky bg-[#121212] p-4 rounded-md top-[75px] py-2 z-[2] flex flex-col items-center space-y-3 md:flex-row md:space-x-4 md:space-y-0'>
+            <div className='md:sticky bg-secondary p-4 rounded-md top-[75px] py-2 z-[2] flex flex-col items-center space-y-3 md:flex-row md:space-x-4 md:space-y-0'>
                 <ArrowLeftIcon onClick={navigateBack} className='block cursor-pointer self-start w-6 h-6 md:self-center text-primary' />
                 <fieldset className='border border-gray-300 p-4 py-2 rounded-md md:flex-1'>
                     <legend className='text-gray-300 text-xs px-2 mx-auto'>Original String</legend>
