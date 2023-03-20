@@ -11,6 +11,9 @@ const config = {
     moduleDirectories: [
         'node_modules',
     ],
+    transformIgnorePatterns: [
+        '/node_modules/(?!(three))',
+    ],
     setupFilesAfterEnv: [
         "<rootDir>/src/jest.setup.ts"
     ]

@@ -10,8 +10,11 @@ enableFetchMocks()
 // disable page transition when testing component to prevent abitrary waits
 config.disabled = true
 
+// Mock webGL expereince in all tests
+jest.mock("./webGL")
 
-// Mock nanoid in every test setup
+
+// Mock nanoid Module in every test setup
 jest.mock("nanoid", () => {
     return { nanoid: () => Math.random() * 73647346374 };
 });
