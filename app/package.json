@@ -43,6 +43,7 @@
     "jest-fetch-mock": "^3.0.3",
     "jest-mock": "^29.5.0",
     "jest-transform-css": "^6.0.1",
+    "jest-transform-stub": "^2.0.0",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.7",
     "ts-jest": "^29.0.5",

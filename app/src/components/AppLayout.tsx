@@ -17,9 +17,6 @@ function AppLayout({ children, customWrapperStyles }: AppLayoutProps) {
     useEffect(() => {
         const experience = new WebglExperience();
 
-        experience.init()
-        console.log(experience)
-
         return () => experience.dispose()
     }, [])
 
@@ -80,7 +77,7 @@ function AppLayout({ children, customWrapperStyles }: AppLayoutProps) {
                     </div>
                 </Transition>
             </SwitchTransition>
-            <canvas data-webgl_canvas className='fixed z-[-1] top-0 left-0' />
+            <canvas data-webgl_canvas className='fixed z-[1] top-0 left-0' />
 
 
         </div>

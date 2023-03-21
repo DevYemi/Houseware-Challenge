@@ -6,7 +6,8 @@ const config = {
         "^.+\\.css$": "jest-transform-css"
     },
     moduleNameMapper: {
-        "\\.(css|less|scss)$": "identity-obj-proxy"
+        "\\.(css|less|scss)$": "identity-obj-proxy",
+        "^.+.(vert|frag|glsl)$": "jest-transform-stub"
     },
     moduleDirectories: [
         'node_modules',
