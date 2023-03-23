@@ -52,28 +52,17 @@ describe("Unit Tests", () => {
 
 
 describe("Integration Test", () => {
-    it("should display user input after routing from home screen", async () => {
-        let string = "aabcaccda";
-        await userInteractionProcess(string)
-
-
-        const pElement = await screen.findByText(string) as HTMLParagraphElement
-
-        expect(pElement).toBeInTheDocument()
-
-
-    })
 
     it("should remove dupliacte of characters user clicked on", async () => {
-        let string = "aabcaccda";
+        let string = "aade";
         const { user } = await userInteractionProcess(string)
 
 
-        const spanElement = await screen.findByTestId("trashIcon-4") as HTMLSpanElement
+        const spanElement = await screen.findByTestId("trashIcon-1") as HTMLSpanElement
 
         await user.click(spanElement)
 
-        const pElement = await screen.findByText("bcaccd") as HTMLParagraphElement
+        const pElement = await screen.findByText("ade") as HTMLParagraphElement
 
         expect(pElement).toBeInTheDocument()
 
@@ -91,6 +80,38 @@ describe("Integration Test", () => {
         const divElement = await screen.findByTestId("successPrompt") as HTMLDivElement
 
         expect(divElement).toBeVisible()
+
+
+    })
+    it("should display Original string after user remove all duplicates", async () => {
+        let string = "aade";
+        const { user } = await userInteractionProcess(string)
+
+
+        const spanElement = await screen.findByTestId("trashIcon-1") as HTMLSpanElement
+
+        await user.click(spanElement)
+
+
+        const originalStringEl = await screen.findByText(string) as HTMLParagraphElement
+
+        expect(originalStringEl).toBeInTheDocument()
+
+
+    })
+    it("should display resultant string after user remove all duplicates", async () => {
+        let string = "aade";
+        const { user } = await userInteractionProcess(string)
+
+
+        const spanElement = await screen.findByTestId("trashIcon-1") as HTMLSpanElement
+
+        await user.click(spanElement)
+
+
+        const resultantStringEl = await screen.findByText("ade") as HTMLParagraphElement
+
+        expect(resultantStringEl).toBeInTheDocument()
 
 
     })
