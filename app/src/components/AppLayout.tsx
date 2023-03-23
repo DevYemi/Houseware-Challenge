@@ -29,7 +29,7 @@ function AppLayout({ children, customWrapperStyles }: AppLayoutProps) {
 
     const onPageEnter = useCallback((element: HTMLElement) => {
 
-
+        // handle page content transition
         gsap.fromTo(
             nodeRef.current,
             {
@@ -49,6 +49,7 @@ function AppLayout({ children, customWrapperStyles }: AppLayoutProps) {
 
 
     const onPageExit = useCallback((element: HTMLElement) => {
+        //  rotate WebGL background
         if (!location.pathname.includes("word-parser")) {
             gsap.to(
                 experience.current!.navigation.view.spherical.smoothed,
@@ -66,6 +67,8 @@ function AppLayout({ children, customWrapperStyles }: AppLayoutProps) {
                 }
             )
         }
+
+        // handle page content transition
         gsap.fromTo(
             nodeRef.current,
             {

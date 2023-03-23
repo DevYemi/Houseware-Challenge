@@ -275,15 +275,16 @@ function WordParseScreen() {
 
     return (
         <div data-testid="wordParserWrapper" className='relative space-y-10 py-5 '>
-            <div className='md:sticky bg-secondary p-4 rounded-md top-[75px] py-2 z-[2] flex flex-col items-center space-y-3 md:flex-row md:space-x-4 md:space-y-0'>
+            <div className={`md:sticky bg-secondary p-4 rounded-md top-[75px] py-2 z-[2] flex flex-col items-center space-y-3 md:flex-row md:space-x-4 md:space-y-0 ${showSuccessOverlay ? "w-full" : "w-fit"}`}>
                 <ArrowLeftIcon onClick={navigateBack} className='block cursor-pointer self-start w-6 h-6 md:self-center text-primary' />
-                <fieldset className='border border-gray-300 p-4 py-2 rounded-md md:flex-1'>
-                    <legend className='text-gray-300 text-xs px-2 mx-auto'>Original String</legend>
-                    <p data-testid="userInput" className='text-center text-gray-400 [word-break:break-word]'>{userInput}</p>
-                </fieldset>
                 {
-                    (resultantString !== userInput && userInput !== "") &&
+                    showSuccessOverlay &&
                     <>
+                        <fieldset className='border border-gray-300 p-4 py-2 rounded-md md:flex-1'>
+                            <legend className='text-gray-300 text-xs px-2 mx-auto'>Original String</legend>
+                            <p data-testid="userInput" className='text-center text-gray-400 [word-break:break-word]'>{userInput}</p>
+                        </fieldset>
+
                         <ArrowLongDownIcon className='w-6 h-6 md:hidden text-primary' />
                         <ArrowLongRightIcon className='w-6 h-6 hidden md:block text-primary' />
                         <fieldset className='border border-gray-300 p-4 py-2 rounded-md md:flex-1'>
@@ -291,20 +292,17 @@ function WordParseScreen() {
                             <p className='text-center text-gray-400 [word-break:break-word]'>{resultantString}</p>
                         </fieldset>
                     </>
-
                 }
+
+
 
             </div>
             <div data-testid="successPrompt" className={`sticky top-[160px] w-fit z-[5] bg-transparent mx-auto opacity-0 pointer-events-none transition-all duration-700 ${showSuccessOverlay ? "opacity-100 pointer-events-auto" : ""}`}>
-                <div role={"presentation"} className="fixed w-full h-full bg-gray-900 opacity-50 top-0 left-0" />
                 <div className='flex relative z-10 bg-white space-x-3 pr-2 items-center'>
                     <span className='bg-green-500 block px-2 py-4'>
                         <CheckCircleIcon className='h-5 w-5 text-white' />
                     </span>
                     <p ref={sucessTextRef} className='text-sm'></p>
-                    <span onClick={() => setShowSuccessOverlay(false)} className='cursor-pointer'>
-                        <XMarkIcon className='h-5 w-5' />
-                    </span>
 
                 </div>
 
