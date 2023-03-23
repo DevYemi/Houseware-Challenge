@@ -58,11 +58,11 @@ export default class TerrainBackground {
         this.texture.instance.wrapS = THREE.RepeatWrapping
         this.texture.instance.wrapT = THREE.RepeatWrapping
         this.texture.instance.magFilter = THREE.NearestFilter
-        document.body.appendChild(this.texture.canvas)
 
         this.texture.update = () => {
             this.texture.ctx.clearRect(0, 0, this.texture.width, this.texture.height);
-            this.texture.ctx.fillStyle = "white";
+
+            this.texture.ctx.fillStyle = "red";
 
             // Big Lines
             const actualBigLineWidth = Math.round(this.texture.height * this.texture.bigLineWidth)
@@ -77,8 +77,11 @@ export default class TerrainBackground {
             // Small lines
             const actualSmallLineWidth = Math.round(this.texture.height * this.texture.smallLineWidth)
             const smallLinesCount = this.texture.lineCount - 1
-            this.texture.ctx.globalAlpha = 0.5;
+
             for (let i = 0; i < smallLinesCount; i++) {
+                this.texture.ctx.save()
+                this.texture.ctx.fillStyle = "green";
+                this.texture.ctx.globalAlpha = 0.7;
 
                 this.texture.ctx.fillRect(
                     0,
@@ -86,6 +89,7 @@ export default class TerrainBackground {
                     this.texture.width,
                     actualSmallLineWidth
                 );
+                this.texture.ctx.restore()
             }
         }
         this.texture.update()
@@ -103,7 +107,7 @@ export default class TerrainBackground {
             side: THREE.DoubleSide,
             uniforms: {
                 uTexture: { value: this.texture.instance },
-                uElevation: { value: 2.0 },
+                uElevation: { value: 4.0 },
                 uTime: { value: 1.0 },
             }
         })
@@ -129,6 +133,10 @@ export default class TerrainBackground {
         this.addDebugUI()
     }
 
+    rotate() {
+
+    }
+
     addDebugUI() {
         const PARAMS = {
             elevation: this.mesh.material.uniforms["uElevation"].value
@@ -152,7 +160,6 @@ export default class TerrainBackground {
 
     dispose() {
         console.log("dispose Terrain")
-        document.body.removeChild(this.texture.canvas);
         this.gsapTweenLoop.forEach(ani => {
             ani.kill()
         })

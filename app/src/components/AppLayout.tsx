@@ -11,18 +11,25 @@ interface AppLayoutProps {
 }
 
 function AppLayout({ children, customWrapperStyles }: AppLayoutProps) {
-    const nodeRef = useRef<HTMLDivElement | null>(null)
+    const nodeRef = useRef<HTMLDivElement | null>(null);
+    const experience = useRef<WebglExperience | null>(null);
     const location = useLocation();
 
     useEffect(() => {
-        const experience = new WebglExperience();
+        experience.current = new WebglExperience();
 
-        return () => experience.dispose()
+        return () => {
+            if (experience.current) {
+                experience.current.dispose()
+            }
+        }
     }, [])
 
 
 
     const onPageEnter = useCallback((element: HTMLElement) => {
+
+
         gsap.fromTo(
             nodeRef.current,
             {
@@ -42,7 +49,23 @@ function AppLayout({ children, customWrapperStyles }: AppLayoutProps) {
 
 
     const onPageExit = useCallback((element: HTMLElement) => {
-        console.log()
+        if (!location.pathname.includes("word-parser")) {
+            gsap.to(
+                experience.current!.navigation.view.spherical.smoothed,
+                {
+                    phi: Math.PI / 20,
+                    duration: 1
+                }
+            )
+        } else {
+            gsap.to(
+                experience.current!.navigation.view.spherical.smoothed,
+                {
+                    phi: Math.PI / 2.2,
+                    duration: 1
+                }
+            )
+        }
         gsap.fromTo(
             nodeRef.current,
             {
@@ -57,7 +80,7 @@ function AppLayout({ children, customWrapperStyles }: AppLayoutProps) {
                 ease: 'power3.inOut',
             }
         )
-    }, [])
+    }, [location])
 
     return (
         <div className={`flex flex-col h-max `}>
@@ -77,7 +100,7 @@ function AppLayout({ children, customWrapperStyles }: AppLayoutProps) {
                     </div>
                 </Transition>
             </SwitchTransition>
-            <canvas data-webgl_canvas className='fixed z-[1] top-0 left-0' />
+            <canvas data-webgl_canvas className='fixed z-[-1] top-0 left-0' />
 
 
         </div>

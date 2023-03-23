@@ -1,11 +1,11 @@
 import * as THREE from "three"
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import gsap from "gsap"
 import { createDebounceFunc } from "../utils/chunks";
 import TerrainBackground from "./TerrainBackground";
 import { Pane } from 'tweakpane';
 import Composer from "./Composer";
+import Navigation from "./Navigation";
 
 
 interface SizesType {
@@ -14,7 +14,7 @@ interface SizesType {
     aspectRatio: number
 }
 
-interface TimeTypes {
+export interface TimeTypes {
     start: number;
     currentTime: number;
     deltaTime: number;
@@ -41,6 +41,7 @@ export default class WebglExperience {
     orbitControls!: OrbitControls
     terrainBackground!: TerrainBackground;
     composer!: Composer;
+    navigation!: Navigation;
 
     constructor() {
         if (WebglExperience._instance instanceof WebglExperience) {
@@ -82,6 +83,7 @@ export default class WebglExperience {
 
         this.terrainBackground = new TerrainBackground(this);
         this.composer = new Composer(this);
+        this.navigation = new Navigation(this);
 
 
         this.tick()
@@ -153,7 +155,7 @@ export default class WebglExperience {
 
     setUpCamera() {
         this.camera = new THREE.PerspectiveCamera(75, this.sizes.aspectRatio, 0.1, 2000)
-        this.camera.position.set(0, 2, 2)
+        this.camera.position.set(0, 0.2, 2);
 
         this.scene.add(this.camera)
     }
@@ -212,6 +214,7 @@ export default class WebglExperience {
         if (this.terrainBackground) this.terrainBackground.update()
 
 
+        this.navigation.update()
         this.composer.update()
         // this.renderer.render(this.scene, this.camera);
         this.stats.end();
@@ -221,7 +224,8 @@ export default class WebglExperience {
 
     dispose() {
         WebglExperience._instance = null;
-        this.terrainBackground.dispose()
+        this.terrainBackground.dispose();
+        this.navigation.dispose()
         window.removeEventListener("resize", this.onResizeCallback);
         this.renderer.dispose();
         window.cancelAnimationFrame(this.requestAnimationFrameRef);

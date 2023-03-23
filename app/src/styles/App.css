@@ -19,3 +19,7 @@ body,
   height: 100%;
   background-color: transparent;
 }
+
+html {
+  background-color: black;
+}
