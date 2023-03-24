@@ -53,7 +53,7 @@ describe("Unit Tests", () => {
 
 describe("Integration Test", () => {
 
-    it("should remove dupliacte of characters user clicked on", async () => {
+    it("should remove duplicate of characters user clicked on", async () => {
         let string = "aade";
         const { user } = await userInteractionProcess(string)
 
