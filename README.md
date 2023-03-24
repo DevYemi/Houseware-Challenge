@@ -2,6 +2,18 @@
 
 A String Duplicate Remover Appllication that was built with React, tailwindCss,WebGL-ThreeJs, and bundled with Vite
 
+## Remarks
+
+- The string duplicate remover is case insensitive
+- The app throws an error when the provided string is either empty or contains only space characters.
+- The app doesn't throws an error when there is a space inbetween words or letters but the space input is ignored when duplicate of character is being removed
+
+## Note
+
+Based on the intruction in the Original readme file i was under the impression that i should be working in the auto generated Feedback branch which i did.
+
+I later discovered i should have been working in the main branch so i eventually merged the feedback branch to the main branch
+
 ## Run Locally
 
 Clone the project
@@ -35,3 +47,9 @@ To run tests, run the following command
 ```bash
   npm run test
 ```
+
+## Features
+
+- WebGL interactive background
+- Smooth page transition
+- Gsap smooth animations
