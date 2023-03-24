@@ -1,6 +1,6 @@
 # String Duplicate Remover
 
-A String Duplicate Remover Appllication that was built with React and bundled with Vite
+A String Duplicate Remover Appllication that was built with React, tailwindCss,WebGL-ThreeJs, and bundled with Vite
 
 ## Run Locally
 
