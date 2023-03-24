@@ -1,13 +1,15 @@
-import React, { MouseEvent, TouchEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeftIcon, ArrowLongDownIcon, TrashIcon, ArrowLongRightIcon, CheckCircleIcon, XMarkIcon } from "@heroicons/react/24/solid"
+import { ArrowLeftIcon, ArrowLongDownIcon, ArrowLongRightIcon, CheckCircleIcon } from "@heroicons/react/24/solid"
 import { nanoid } from "nanoid"
 import gsap from "gsap"
 import { Flip } from "gsap/dist/Flip"
+import { generateRandomColor, getIsDuplicate } from '../utils/chunks';
+import Card from '../components/Card';
 
 gsap.registerPlugin(Flip);
 
-interface CharType {
+export interface CharType {
 
     char: string,
     color: string,
@@ -22,21 +24,21 @@ function WordParseScreen() {
     const sucessTextRef = useRef<HTMLParagraphElement | null>(null);
     const [userInput, setUserInput] = useState("");
     const [resultantString, setResultantString] = useState<string>("");
-    const [showSuccessOverlay, setShowSuccessOverlay] = useState(false);
+    const [showSuccessHeader, setShowSuccessHeader] = useState(false);
 
     const navigateBack = () => {
         localStorage.removeItem("StringDuplicateUserInput")
         navigate(-1)
     }
 
-    const removeCharacter = (index: number, item: CharType) => {
+    const removeCharacter = useCallback((index: number, item: CharType) => {
         const newStr = resultantString.split("").filter((char, i) => {
             return item.char.toLowerCase() !== char.toLowerCase() || item.originalIndex === i
         }).join("")
 
         const isDuplicate = getIsDuplicate(newStr)
 
-        setShowSuccessOverlay(!isDuplicate)
+        setShowSuccessHeader(!isDuplicate)
 
         if (isDuplicate || newStr !== resultantString) { //create a nice smooth animation when duplicate is being removed
             const clickedCard = document.querySelector(`[data-cardindex="${index}"]`)
@@ -100,94 +102,15 @@ function WordParseScreen() {
         }
 
 
-    }
+    }, [resultantString])
 
-    const getIsDuplicate = useCallback((str: string) => { //checks and return a boolean if a string contains duplicates
-        if (!str) return false
-        const store: string[] = [];
-        let value: boolean = false;
-        for (let i = 0; i < str.length; i++) {
-            const char = str[i];
-
-            if (store.includes(char.toLowerCase())) {
-                i = str.length + 1;
-                value = true
-            } else {
-                if (char !== " ") store.push(char.toLowerCase())
-            }
-        }
-
-        return value;
-    }, [])
-
-    const rotateCards = (e: MouseEvent, type: "enter" | "leave") => { // 3d rotate card on hover 
-        const el = e.currentTarget
-        const rect = el.getBoundingClientRect()
-
-        //  get mouse coord (e.g 0-1) relative to card element
-        let xCoord = (e.clientX - rect.left) / rect.width;
-        let yCoord = ((e.clientY - rect.top) / rect.height);
-
-        // rotate 3d values moving from -10,+10
-        let rotateX = (yCoord - 0.5) * 20
-        let rotateY = (xCoord - 0.5) * 20
-
-
-        if (type === "enter") {
-            gsap.to(
-                el,
-                {
-                    rotationX: rotateX,
-                    rotateZ: rotateY * 0.5,
-                    rotateY: rotateY,
-                    backgroundImage: `
-                    radial-gradient(farthest-corner circle at ${xCoord * 100}% ${yCoord * 100}% , white 20%, transparent 90%),
-                    url("/pattern.png"),
-                    url("/checkBoard.png")
-                    `,
-                    backgroundBlendMode: "soft-light,hue,soft-light",
-                    duration: 1
-                }
-            )
-
-        } else {
-            gsap.to(
-                el,
-                {
-                    rotationX: 0,
-                    rotateZ: 0,
-                    rotateY: 0,
-                    backgroundImage: `
-                    radial-gradient(farthest-corner circle at ${xCoord * 100}% ${yCoord * -100}% , transparent 5%, transparent 20%),
-                    url("/pattern.png"),
-                    url("/checkBoard.png")
-                    `,
-                    backgroundBlendMode: "soft-light,soft-light,hue",
-                    duration: 2
-                }
-            )
-        }
-    }
 
 
     const userInputCharacters = useMemo(() => {
         const characters: CharType[] = [];
         const colors: string[] = [];
 
-        const generateRandomColor = (): string => {
-            const x = Math.round(0xffffff * Math.random()).toString(16);
-            const y = (6 - x.length);
-            const z = "000000";
-            const z1 = z.substring(0, y);
-            const color = `#${z1}${x}`
 
-            if (colors.includes(color)) {
-                return generateRandomColor()
-            } else {
-                return color;
-            }
-
-        }
 
         if (userInput === resultantString) { // user hasn't removed any duplicate
 
@@ -206,7 +129,7 @@ function WordParseScreen() {
                             }
                         )
                     } else {
-                        const color = generateRandomColor();
+                        const color = generateRandomColor(colors);
                         charColorStoreRef.current[char.toLowerCase()] = color;
                         characters.push(
                             {
@@ -260,25 +183,25 @@ function WordParseScreen() {
             const isDuplicate = getIsDuplicate(string)
             if (!isDuplicate) {
                 sucessTextRef.current!.innerText = "Ooops the string you provided have no duplicate"
-                setShowSuccessOverlay(true);
+                setShowSuccessHeader(true);
             } else {
                 sucessTextRef.current!.innerText = "You have sucessfully remove all duplicate string"
-                setShowSuccessOverlay(false);
+                setShowSuccessHeader(false);
             }
         } else {
             navigate("/")
         }
 
-    }, [navigate, getIsDuplicate])
+    }, [navigate])
 
 
 
     return (
         <div data-testid="wordParserWrapper" className='relative space-y-10 py-5 '>
-            <div className={`md:sticky bg-secondary p-4 rounded-md top-[75px] py-2 z-[2] flex flex-col items-center space-y-3 md:flex-row md:space-x-4 md:space-y-0 ${showSuccessOverlay ? "w-full" : "w-fit"}`}>
+            <div className={` bg-secondary p-4 rounded-md py-2 z-[2] flex flex-col items-center space-y-3 md:flex-row md:space-x-4 md:space-y-0 ${showSuccessHeader ? "w-full" : "w-fit"}`}>
                 <ArrowLeftIcon onClick={navigateBack} className='block cursor-pointer self-start w-6 h-6 md:self-center text-primary' />
                 {
-                    showSuccessOverlay &&
+                    showSuccessHeader &&
                     <>
                         <fieldset className='border border-gray-300 p-4 py-2 rounded-md md:flex-1'>
                             <legend className='text-gray-300 text-xs px-2 mx-auto'>Original String</legend>
@@ -297,7 +220,7 @@ function WordParseScreen() {
 
 
             </div>
-            <div data-testid="successPrompt" className={`sticky top-[160px] w-fit z-[5] bg-transparent mx-auto opacity-0 pointer-events-none transition-all duration-700 ${showSuccessOverlay ? "opacity-100 pointer-events-auto" : ""}`}>
+            <div data-testid="successPrompt" className={` w-fit z-[5] bg-transparent mx-auto opacity-0 pointer-events-none transition-all duration-700 ${showSuccessHeader ? "opacity-100 pointer-events-auto" : ""}`}>
                 <div className='flex relative z-10 bg-white space-x-3 pr-2 items-center'>
                     <span className='bg-green-500 block px-2 py-4'>
                         <CheckCircleIcon className='h-5 w-5 text-white' />
@@ -311,52 +234,12 @@ function WordParseScreen() {
             <div data-cards-wrapper className='grid grid-cols-[repeat(auto-fill,_minmax(132px,_1fr))] gap-4  md:gap-8 md:grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] '>
                 {
                     userInputCharacters.map((item, i) => (
-                        <div
+                        <Card
                             key={item.id}
-                            data-card
-                            data-cardindex={i}
-                            data-card-charvalue={item.char}
-                            className='[perspective:300px]'
-                        >
-                            <p
-
-                                className={`group aspect-square   relative bg-[radial-gradient(farthest-corner_circle_at_0%_0%,_transparent_5%,_transparent_20%),url("/pattern.png"),url("/checkBoard.png")]  [background-blend-mode:soft-light,soft-light,hue] bg-contain rounded-md  shadow-black `}
-                                style={{ backgroundColor: item.color }}
-                                // onTouchStart={(e: TouchEvent) => removeCharacter(i, item)}
-                                onMouseMove={(e: MouseEvent) => rotateCards(e, "enter")}
-                                onMouseLeave={(e: MouseEvent) => rotateCards(e, "leave")}
-
-                            >
-                                <span
-                                    className='flex font-medium justify-center items-center h-full text-white text-[4rem] '>
-                                    {item.char}
-                                </span>
-                                <span
-                                    data-testid={`trashIcon-${i}`}
-                                    className='absolute bg-red-200 p-2 rounded-md cursor-pointer top-1 right-1 md:top-4 md:right-4  transition-all duration-700'
-                                    onClick={(e: MouseEvent) => removeCharacter(i, item)}
-                                >
-                                    <TrashIcon className='w-6 h-6 text-red-500' />
-                                </span>
-
-                            </p>
-                            <svg className='absolute top-0 left-0 pointer-events-none w-full h-full z-[2]'>
-                                <filter id={`noise-${i}`} x='0%' y='0%' width='100%' height='100%' >
-                                    <feTurbulence
-                                        baseFrequency='0.02 0.03'
-                                        result='NOISE'
-                                        numOctaves={1}
-                                        id='image-turbulence'
-                                    />
-                                    <feDisplacementMap
-                                        in='SourceGraphic'
-                                        in2='NOISE'
-                                        scale={50}
-                                        id='image-displacement'
-                                    />
-                                </filter>
-                            </svg>
-                        </div>
+                            item={item}
+                            index={i}
+                            removeCharacter={removeCharacter}
+                        />
 
                     ))
                 }
