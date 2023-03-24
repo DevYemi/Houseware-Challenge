@@ -115,20 +115,17 @@ export default class TerrainBackground {
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.rotation.x = -(Math.PI * 0.5)
         this.mesh.scale.set(15, 15, 15);
-        this.mesh.position.y = -1;
+        this.mesh.position.y = -20;
         this.camera.lookAt(this.mesh.position)
         this.scene.add(this.mesh)
 
-        // this.gsapTweenLoop.push(
-        //     gsap.to(this.mesh.material.uniforms["uTime"], {
-        //         value: 2.0,
-        //         duration: 10,
-        //         yoyo: true,
-        //         yoyoEase: true,
-        //         repeatDelay: 0.1,
-        //         repeat: -1
-        //     })
-        // )
+        gsap.to(
+            this.mesh.position,
+            {
+                y: "-1",
+                duration: 2
+            }
+        )
 
         this.addDebugUI()
     }
