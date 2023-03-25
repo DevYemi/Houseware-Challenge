@@ -12,7 +12,7 @@ A String Duplicate Remover Appllication that was built with React, tailwindCss,W
 
 Based on the intruction in the Original readme file i was under the impression that i should be working in the auto generated Feedback branch which i did.
 
-I later discovered i should have been working in the main branch so i eventually merged the feedback branch to the main branch
+I later discovered i should have used the gitHub flow and and push all my code to the main branch which i have now done
 
 ## Run Locally
 
